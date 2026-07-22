@@ -13,10 +13,14 @@ fi
 
 echo "[im-old-greg] installing dependencies..."
 
-# system libs for hmatrix (BLAS/LAPACK/GSL)
+# system libs for GHC linking + hmatrix (BLAS/LAPACK/GSL)
+# libgmp-dev is not optional: every GHC link step fails without it
 apt-get update -qq 2>/dev/null || true
 apt-get install -y -qq \
+  libgmp-dev \
+  zlib1g-dev \
   libgsl-dev \
+  libblas-dev \
   liblapack-dev \
   libatlas-base-dev \
   libffi-dev \
@@ -32,11 +36,6 @@ echo "[im-old-greg] system libs done"
 command -v curl  > /dev/null 2>&1 || apt-get install -y -qq curl  2>/dev/null || true
 command -v wget  > /dev/null 2>&1 || apt-get install -y -qq wget  2>/dev/null || true
 echo "[im-old-greg] curl/wget confirmed"
-
-# pip for any build tooling
-command -v pip > /dev/null 2>&1 || {
-  apt-get install -y -qq python3-pip 2>/dev/null || true
-}
 
 # ghcup (GHC + cabal)
 if ! command -v ghc > /dev/null 2>&1; then
@@ -74,8 +73,9 @@ if ! command -v kics2 > /dev/null 2>&1; then
   KICS2_DIR="$HOME/.kics2"
   mkdir -p "$KICS2_DIR"
 
-  # try prebuilt tarball first
-  KICS2_URL="https://www-ps.informatik.uni-kiel.de/kics2/download/kics2-3.1.0-x86_64-linux.tar.gz"
+  # try prebuilt tarball first (debian12 build; see
+  # www-ps.informatik.uni-kiel.de/kics2/download.html for others)
+  KICS2_URL="https://www-ps.informatik.uni-kiel.de/kics2/download/kics2-3.1.0-x86_64-linux-debian12.tar.gz"
   echo "[im-old-greg] fetching KiCS2 prebuilt..."
   if curl -fSL -o /tmp/kics2.tar.gz "$KICS2_URL" 2>/dev/null; then
     tar xzf /tmp/kics2.tar.gz -C "$KICS2_DIR" --strip-components=1
@@ -106,11 +106,20 @@ else
   echo "[im-old-greg] KiCS2 already present"
 fi
 
-# CBOR CLI tool (for inspecting .greg files)
-pip install cbor2 --break-system-packages -q 2>/dev/null || \
-  pip install cbor2 -q 2>/dev/null || \
-  pip3 install cbor2 --break-system-packages -q 2>/dev/null || true
-echo "[im-old-greg] cbor2 CLI done"
+# .greg inspection is greg-geom's job (no Python in this house):
+#   greg-geom validate < data.greg
+#   greg-geom bin2hex  < data.greg
+# curry-frontend (typecheck without full KiCS2), best effort:
+if ! command -v curry-frontend > /dev/null 2>&1; then
+  ( cd /tmp && \
+    git clone --depth 1 \
+      https://github.com/cau-placc/curry-frontend.git cf 2>/dev/null && \
+    cd cf && \
+    cabal install exe:curry-frontend \
+      --overwrite-policy=always \
+      --installdir="$HOME/.local/bin" 2>/dev/null ) || \
+    echo "[im-old-greg] WARN: curry-frontend install failed"
+fi
 
 # write PATH export for session
 cat > /tmp/.imoldgreg-env << ENVEOF
@@ -121,7 +130,7 @@ echo "[im-old-greg] verifying..."
 echo "  ghc:   $(ghc --numeric-version 2>/dev/null || echo 'NOT FOUND')"
 echo "  cabal: $(cabal --numeric-version 2>/dev/null || echo 'NOT FOUND')"
 echo "  kics2: $(kics2 --version 2>/dev/null || echo 'NOT FOUND')"
-echo "  cbor2: $(python3 -c 'import cbor2; print(cbor2.__version__)' 2>/dev/null || echo 'NOT FOUND')"
+echo "  curry-frontend: $("$HOME/.local/bin/curry-frontend" --numeric-version 2>/dev/null || echo 'NOT FOUND')"
 echo "[im-old-greg] ready"
 echo "[im-old-greg] source /tmp/.imoldgreg-env to set PATH"
 

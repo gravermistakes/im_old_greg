@@ -1,0 +1,17 @@
+# build output
+dist-newstyle/
+out/
+*.o
+*.hi
+.curry/
+*.fcy
+*.icurry
+
+# compiled binaries
+greg
+greg-geom
+tests/Test*
+!tests/*.curry
+
+# local fields (data is not source)
+*.greg
