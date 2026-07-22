@@ -1,11 +1,8 @@
 -- AxisSeeds: the starter atlas of axes, mined from Wikipedia's
 -- ontology pages and differentiated outward from isness.
 --
--- Tier 0: the atoms. Irreducible aspects anything that exists can
---         have. Each applies to a dolphin, a poem, a protocol,
---         and a storm alike.
--- Tier 1: one differentiation step out from an atom.
--- Tier 2: one further step, still domain-agnostic.
+-- Tier 0: isness
+--     All axes need adjusted
 --
 -- Axes belong to no memo and are owned by nothing. This module
 -- does not create axes: it offers seeds. An axis only exists in
