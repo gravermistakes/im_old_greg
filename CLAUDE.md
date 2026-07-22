@@ -17,7 +17,6 @@ IM OLD GREG is a shape-matching system on a Riemannian manifold. It is domain-ag
 - **Core logic**: Curry. No exceptions.
 - **Backend**: KiCS2 (compiles Curry to Haskell, then GHC compiles to native binary).
 - **Geometry**: Haskell libraries only (manifolds, goal-geometry, hmatrix, hTensor, algebraic-graphs). Do not hand-roll differential geometry. Do not hand-roll tensor operations. Do not hand-roll linear algebra. Use the libraries. We learned this lesson already.
-- **Harness**: Bash/POSIX shell for CLI wrappers.
 - **Storage encoding**: CBOR.
 - **No Python.** Not for prototyping. Not for scripts. Not for tests. Not for anything.
 - **No JSON.** Internal format is CBOR. External communication is CBOR via CLI.
@@ -60,11 +59,11 @@ Wojaks are the ground truth. They have seeds (immutable identity) and state (mut
 
 Do not write code that treats memos or pepos as parents, owners, or containers. Do not write code that scopes axes to a memo. Do not write code that gives memos or pepos structural authority over wojaks.
 
-## AXIS COORDINATE TYPES
+## AXIS TYPES
 
-Coordinates are typed: scalar, vector, ray, matrix, tensor, graph, lattice, manifold. These nest recursively. Minimum 31 dimensions, uncapped. Some coordinates are tensors, not lines. The system must be type-aware when computing distances.
+Axes are typed: scalar, vector, ray, matrix, tensor, graph, lattice, manifold. These nest recursively. Minimum 31 dimensions, uncapped. Some axes are tensors, not lines. The system must be type-aware when computing distances.
 
-Do not flatten coordinate types. Do not treat all coordinates as scalars. Do not cap dimensions.
+Do not flatten axis types. Do not treat all axis as scalars. Do not cap dimensions.
 
 ## STORAGE
 
