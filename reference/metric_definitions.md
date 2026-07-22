@@ -3,7 +3,7 @@
 These are the locked 29. This file records what each type means
 mathematically, what the Curry core can decide today, and what is
 delegated to the geometry helper. Definitions may deepen; the set
-may not change without operator instruction.
+may not change without operator instruction. OPERATOR: WHO TF SAID MATH DEFINED THIS
 
 Verdict semantics (Metrics.curry): `Confirmed` means the
 structural evidence in the coordinates decides it. `Candidate`
