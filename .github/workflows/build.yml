@@ -1,0 +1,126 @@
+name: build
+
+# Anja compiles nothing. This workflow is the toolchain.
+# Two binaries: greg (Curry via KiCS2) and greg-geom (Haskell).
+# Every push builds and tests; tags publish to Releases.
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+
+jobs:
+  greg-geom:
+    name: greg-geom (Haskell helper)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: system libraries for hmatrix
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libblas-dev liblapack-dev libgsl-dev
+
+      - uses: haskell-actions/setup@v2
+        id: hs
+        with:
+          ghc-version: "9.6.4"
+          cabal-version: "3.10.2.1"
+
+      - name: cache cabal store
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ steps.hs.outputs.cabal-store }}
+            src/haskell/dist-newstyle
+          key: cabal-${{ runner.os }}-9.6.4-${{ hashFiles('src/haskell/greg-geom.cabal') }}
+          restore-keys: cabal-${{ runner.os }}-9.6.4-
+
+      - name: build
+        working-directory: src/haskell
+        run: |
+          cabal update
+          cabal build exe:greg-geom
+          mkdir -p ../../out
+          cp "$(cabal list-bin greg-geom)" ../../out/greg-geom
+
+      - name: smoke test hex transport
+        run: |
+          printf 'IMOLDGREG' | ./out/greg-geom bin2hex | tee hex.txt
+          test "$(cat hex.txt)" = "494d4f4c4447524547"
+          printf '%s' "$(cat hex.txt)" | ./out/greg-geom hex2bin > back.bin
+          test "$(cat back.bin)" = "IMOLDGREG"
+
+      - name: smoke test kernel
+        run: |
+          # ["chord",[0,0],[3,4]] in CBOR hex -> 5.0
+          printf '836563686f7264820000820304' | ./out/greg-geom kernel
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: greg-geom-x86_64-linux
+          path: out/greg-geom
+
+  greg:
+    name: greg (Curry core via KiCS2)
+    runs-on: ubuntu-latest
+    container:
+      image: currylang/kics2:3.5.0
+      options: --user root
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: compile greg binary
+        shell: bash
+        run: |
+          export HOME=/root
+          mkdir -p out bin
+          kics2 --nocypm :set path src/curry \
+                :load ImOldGreg :save :quit
+          mv src/curry/ImOldGreg out/greg 2>/dev/null || mv ImOldGreg out/greg
+          ./out/greg types
+
+      - name: run tests
+        shell: bash
+        run: |
+          export HOME=/root
+          for t in TestMetrics TestAxes TestStorage TestQuery TestAnalogy; do
+            echo "== $t"
+            kics2 --nocypm :set path src/curry:tests \
+                  :load "$t" :save :quit
+            if [ -f "tests/$t" ]; then "tests/$t"; else "./$t"; fi
+          done
+
+      - name: verify the 29 are locked
+        shell: bash
+        run: |
+          n=$(./out/greg types | grep -c '^  ')
+          test "$n" = "29"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: greg-x86_64-linux
+          path: out/greg
+
+  release:
+    name: publish binaries
+    needs: [greg, greg-geom]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+      - name: layout
+        run: |
+          mv dist/greg-x86_64-linux/greg dist/greg
+          mv dist/greg-geom-x86_64-linux/greg-geom dist/greg-geom
+          chmod +x dist/greg dist/greg-geom
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/greg
+            dist/greg-geom

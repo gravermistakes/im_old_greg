@@ -220,27 +220,30 @@ im-old-greg/
 |-- SKILL.md
 |-- CLAUDE.md
 |-- AGENTS.md
-|-- LICENSE                   (GPL-3.0-or-later)
+|-- LICENSE                   (AGPL-3.0)
 |-- src/
 |   |-- curry/
 |   |   |-- ImOldGreg.curry   (main entry + CLI dispatch)
+|   |   |-- Cbor.curry        (pure Curry CBOR codec)
 |   |   |-- Memo.curry        (memo/pepo/wojak data model)
 |   |   |-- Axes.curry        (axis structures + coordinate system)
 |   |   |-- Metrics.curry     (11 morphisms + 7 routings + 5 measures + 3 antithets + 2 directions + 1 isness)
 |   |   |-- Canonicalize.curry (concrete -> abstract shape extraction)
 |   |   |-- Analogy.curry     (analogy engine + triangulation)
-|   |   |-- Query.curry       (query interface + diffusion)
-|   |   |-- Storage.curry     (.greg FCAF persistence + CBOR)
+|   |   |-- Query.curry       (diffusion querying + hot/warm/cold)
+|   |   |-- Storage.curry     (.greg FCAF framing + transport)
 |   |   |-- Witness.curry     (witness mesh observations)
-|   |   +-- Chores.curry      (chore CRUD + suggestion engine)
+|   |   |-- Chores.curry      (chore CRUD + suggestion engine)
+|   |   +-- AxisSeeds.curry   (starter axis atlas, 3 tiers)
 |   +-- haskell/
-|       |-- Geometry.hs       (wrapper: manifolds + goal-geometry)
-|       |-- LinAlg.hs         (wrapper: hmatrix + hTensor)
+|       |-- greg-geom.cabal   (helper executable)
+|       |-- Geometry.hs       (curvature + chord measures)
+|       |-- LinAlg.hs         (wrapper: hmatrix)
 |       |-- GraphOps.hs       (wrapper: algebraic-graphs)
-|       +-- FFIBridge.hs      (KiCS2 foreign function interface)
+|       +-- FFIBridge.hs      (greg-geom main: transport + kernels)
 |-- harness/
-|   |-- run.sh                (CLI entry point)
-|   |-- ingest.sh             (create memo/pepo/wojak)
+|   |-- run.sh                (CLI entry point, owns the file boundary)
+|   |-- ingest.sh             (grow wojaks)
 |   |-- query.sh              (run queries)
 |   |-- relate.sh             (find relationships)
 |   |-- analogize.sh          (analogy/triangulation queries)
@@ -251,8 +254,8 @@ im-old-greg/
 |-- tests/
 |   |-- TestMetrics.curry
 |   |-- TestAxes.curry
+|   |-- TestStorage.curry
 |   |-- TestAnalogy.curry
-|   |-- test_geometry/
 |   +-- TestQuery.curry
 |-- reference/
 |   +-- metric_definitions.md

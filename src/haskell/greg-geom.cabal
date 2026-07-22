@@ -1,0 +1,27 @@
+cabal-version:      2.4
+name:               greg-geom
+version:            0.1.0
+synopsis:           the machine half of im-old-greg
+description:
+  Byte transport (hex/binary) and numeric kernels for the
+  IM OLD GREG field. CBOR in, CBOR out. No JSON.
+license:            AGPL-3.0-or-later
+license-file:       ../../LICENSE
+author:             Anja Evermoor
+maintainer:         evermoor.a.a@gmail.com
+build-type:         Simple
+
+executable greg-geom
+  main-is:          FFIBridge.hs
+  other-modules:    Geometry
+                  , GraphOps
+                  , LinAlg
+  build-depends:    base >= 4.14 && < 5
+                  , bytestring
+                  , containers
+                  , cborg >= 0.2
+                  , text
+                  , hmatrix >= 0.20
+                  , algebraic-graphs >= 0.6
+  default-language: Haskell2010
+  ghc-options:      -Wall -O2
