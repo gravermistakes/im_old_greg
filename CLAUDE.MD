@@ -21,7 +21,7 @@ IM OLD GREG is a shape-matching system on a Riemannian manifold. It is domain-ag
 - **Storage encoding**: CBOR.
 - **No Python.** Not for prototyping. Not for scripts. Not for tests. Not for anything.
 - **No JSON.** Internal format is CBOR. External communication is CBOR via CLI.
-- **License**: GPL-3.0-or-later.
+- **License**: AGPL-3.0
 
 ## BUILD RULES
 
