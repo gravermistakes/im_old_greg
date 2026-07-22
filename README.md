@@ -16,7 +16,7 @@ IM OLD GREG finds these convergences. Given known instances of a shape, it extra
 
 The real entity. A wojak is a bundle of ideas and relationships in spatial relation to other ideas and relationships. Wojaks are the ground truth. Everything else is organizational.
 
-A wojak has a **seed**: the irreducible kernel that was true at creation and remains true no matter how the wojak evolves. The seed IS the identity. Not a hash of it. Not a UUID. The seed itself. Everything else - relationships, context, axis positions - accretes around the seed. A dolphin that gains a new relationship to a research paper is not a new dolphin. It is the same dolphin, richer.
+A wojak has a **seed**: the irreducible kernel that was true at creation and remains true no matter how the wojak evolves. The seed IS the identity. Not a hash of it. Not a UUID. The seed itself. Everything else — relationships, context, axis positions — accretes around the seed. A dolphin that gains a new relationship to a research paper is not a new dolphin. It is the same dolphin, richer.
 
 ### Pepo
 
@@ -31,8 +31,7 @@ The broadest grouping. "Internet Pictography", "Cetacea", "Fermented Foods". Lik
 Axes are first-class entities. They exist independently of memos and pepos. Wojaks have coordinates on axes. That is the only structural relationship.
 
 "Trophic Level" is an axis. Dolphins have coordinates on it. So do hawks. So do bass. They are in different memos, but the axis does not care.
-
-"Platform" is an axis - not "digital platforms," but the abstract concept of a base from which something operates. 4chan, the New York Times, an oil derrick, a hunting blind, a political party, a tectonic plate, and a cell membrane are all positions on the Platform axis.
+"Platform" is an axis — not "digital platforms," but the abstract concept of a base from which something operates. 4chan, the New York Times, an oil derrick, a hunting blind, a political party, a tectonic plate, and a cell membrane are all positions on the Platform axis.
 
 "Fermentation Method" is an axis. Kimchi, yogurt, ruminant digestion, composting, and sewage treatment all have coordinates on it.
 
@@ -40,7 +39,7 @@ Axes are maximally abstract. Wojaks create them by having coordinates on them. A
 
 ### Axis Coordinate Types
 
-A wojak's coordinate on an axis is not necessarily a simple value. Coordinates are typed, and the types form a recursive nonhierarchical system:
+A wojak's coordinate on an axis is not necessarily a simple value. Coordinates are typed, and the types form a recursive hierarchy:
 
 - **Scalar**: A single value. (Trophic Level = 3)
 - **Vector**: Distribution or multi-occupancy. (Habitat = [coastal, pelagic, estuarine])
@@ -51,7 +50,7 @@ A wojak's coordinate on an axis is not necessarily a simple value. Coordinates a
 - **Lattice**: Ordered structure with meets and joins. (Taxonomic Classification)
 - **Manifold**: Curved space of possible states. (Phenotypic Landscape)
 
-A manifold's points can be tensors whose components are graphs whose nodes carry vectors. There is no limit to nesting depth. Minimum dimensionality is 31 axes, uncapped.
+These types nest recursively. A manifold's points can be tensors whose components are graphs whose nodes carry vectors. There is no limit to nesting depth. Minimum dimensionality is 31 axes, uncapped.
 
 ### Isness
 
