@@ -14,16 +14,13 @@ import System.Environment ( getArgs )
 import System.IO ( hGetContents, stdin )
 
 import Cbor
-import Axes
-import Memo
+import Wojak
 import Metrics
 import Canonicalize
 import Query
 import Analogy
 import Storage
-import Witness
-import Chores
-import AxisSeeds
+import Advisory
 
 main :: IO ()
 main = do
@@ -32,7 +29,6 @@ main = do
     []            -> putStr usage
     ("help" : _)  -> putStr usage
     ("types" : _) -> putStr typesReport
-    ("atlas" : _) -> putStr atlasReport
     (cmd : rest)  -> do
       hexIn <- hGetContents stdin
       run cmd rest (loadField hexIn)
@@ -76,10 +72,8 @@ run cmd args f = case (cmd, args) of
   ("shape", (seed : ax : _)) ->
     putStr (shapeReport f (CText seed) ax)
 
-  ("seed-axes", _) -> emitField (seedField f)
-
-  ("chores", _) ->
-    putStr (renderChores (suggestChores f []))
+  ("advisory", _) ->
+    putStr (renderAdvisories (fieldAdvisories f))
 
   ("compact", _) ->
     case compact (encodeField f) of
@@ -214,9 +208,7 @@ usage = unlines
   , "  analogy A B C               A : B :: C : ?"
   , "  triangulate S1 S2 [...]     invariant + matches"
   , "  shape SEED AXIS             canonical shape of a coordinate"
-  , "  seed-axes                   materialize the axis atlas"
-  , "  atlas                       list the starter axis seeds"
-  , "  chores                      what the field asks for"
+  , "  advisory                    what the field surfaces about itself"
   , "  compact                     fold accretion, emit hex"
   , "  types                       the 29 relationship types"
   ]

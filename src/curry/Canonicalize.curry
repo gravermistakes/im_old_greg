@@ -13,7 +13,7 @@ module Canonicalize
 
 import Data.List ( intercalate, sum )
 
-import Axes
+import Wojak
 
 -- a Shape is a Coord with holes
 data Shape

@@ -26,7 +26,7 @@ cmd="$1"
 # commands that rewrite the field
 mutates() {
   case "$1" in
-    init|add|connect|set-coord|seed-axes|compact) return 0 ;;
+    init|add|connect|set-coord|compact) return 0 ;;
     *) return 1 ;;
   esac
 }

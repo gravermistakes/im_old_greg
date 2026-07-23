@@ -1,7 +1,7 @@
 -- TestMetrics: the 29 are locked; morphism verdicts behave.
 module TestMetrics where
 
-import Axes
+import Wojak
 import Metrics
 
 check :: String -> Bool -> IO ()

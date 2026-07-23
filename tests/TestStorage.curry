@@ -3,10 +3,8 @@
 module TestStorage where
 
 import Cbor
-import Axes
-import Memo
+import Wojak
 import Storage
-import Witness
 
 check :: String -> Bool -> IO ()
 check name ok =
@@ -66,13 +64,4 @@ main = do
          Nothing -> False
        Nothing -> False)
 
-  -- witness mesh
-  let m0 = encodeMesh [Observation [] (CText "first light")]
-      m1 = appendObs m0 (Observation [0] (CText "saw the first"))
-      obs = decodeMesh m1
-  check "witness mesh appends and decodes" (length obs == 2)
-  check "corroboration counts references"
-    (corroboration obs 0 == 1 && corroboration obs 1 == 0)
-  check "unwitnessed finds the growing edge"
-    (unwitnessed obs == [1])
   putStrLn "TestStorage: all passed"
