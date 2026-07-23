@@ -11,9 +11,17 @@ kernels).
 
 ## Setup
 
+Download the latest `greg` and `greg-geom` binaries from the GitHub
+Releases page and put them on PATH. Then:
+
+```sh
+export GREG_FIELD=./data.greg
+sh harness/run.sh init      # emit an empty field
+sh harness/run.sh add isness
 ```
-redo this correctly
-```
+
+`greg types` must print exactly 29 relationship types. If it does not,
+stop and report before doing anything else.
 
 ## Growing the field
 
@@ -21,7 +29,8 @@ Every wojak automatically connects to the axis of isness. Seeds are identity: re
 
 ## Asking questions
 
-# Owner Note; Bash isnt the query language: Curry is.
+The query language is Curry, not Bash. The harness translates CLI
+commands to hex CBOR on stdin/stdout; the binary does the reasoning.
 
 `greg types` prints the 29 locked relationship types; if that
 number is ever not 29, stop and report.
@@ -38,4 +47,4 @@ number is ever not 29, stop and report.
 
 `relate` verdicts: Confirmed is structural fact; Candidate means smooth-morphism compatible but uncertified; Absent is ruled out.
 `analogy` mismatch scores: lower is better, 0 is exact.
-`chores` is the field reporting its own thin spots; act on them or surface them to the operator.
+`advisory` is the field reporting its own thin spots; act on them or surface them to the operator.
