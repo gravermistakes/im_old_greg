@@ -19,7 +19,7 @@ module Storage
   ) where
 
 import Cbor
-import Memo
+import Wojak
 
 data Record
   = NodeRec CborValue     -- wojak (seed + coords + state)

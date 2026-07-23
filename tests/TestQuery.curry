@@ -3,8 +3,7 @@
 module TestQuery where
 
 import Cbor
-import Axes
-import Memo
+import Wojak
 import Query
 
 check :: String -> Bool -> IO ()
