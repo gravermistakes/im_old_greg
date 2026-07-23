@@ -16,8 +16,7 @@ module Analogy
 import Data.List ( sortBy, nub, sum )
 
 import Cbor
-import Axes
-import Memo
+import Wojak
 import Metrics
 import Canonicalize
 

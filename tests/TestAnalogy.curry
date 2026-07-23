@@ -3,8 +3,7 @@
 module TestAnalogy where
 
 import Cbor
-import Axes
-import Memo
+import Wojak
 import Canonicalize
 import Analogy
 

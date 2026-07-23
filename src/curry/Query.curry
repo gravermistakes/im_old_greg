@@ -14,8 +14,7 @@ module Query
 import Data.List ( sortBy, sum )
 
 import Cbor
-import Axes
-import Memo
+import Wojak
 
 type Signal = [(Seed, Float)]
 

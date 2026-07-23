@@ -20,7 +20,7 @@ module Metrics
 
 import Data.List ( sortBy, sum )
 
-import Axes
+import Wojak
 
 data Morphism
   = Isomorphic | Isometric | Homomorphic | Homeomorphic
