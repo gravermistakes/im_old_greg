@@ -77,7 +77,7 @@ run cmd args f = case (cmd, args) of
 
   ("compact", _) ->
     case compact (encodeField f) of
-      Just bs -> putStrLn (bytesToHex bs)
+      Just bs -> putStrLn (bytesToB64 bs)
       Nothing -> putStr "compact: field did not decode\n"
 
   _ -> putStr usage
