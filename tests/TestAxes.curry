@@ -2,7 +2,7 @@
 -- distance. Coordinates are never flattened to scalars.
 module TestAxes where
 
-import Axes
+import Wojak
 
 check :: String -> Bool -> IO ()
 check name ok =
