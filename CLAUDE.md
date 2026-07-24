@@ -63,7 +63,7 @@ Do not write code that treats memos or pepos as parents, owners, or containers. 
 
 Axes are typed: scalar, vector, ray, matrix, tensor, graph, lattice, manifold. These nest recursively. Minimum 31 dimensions, uncapped. Some axes are tensors, not lines. The system must be type-aware when computing distances.
 
-Do not flatten axis types. Do not treat all axis as scalars. Do not cap dimensions.
+Do not flatten axis types. Do not treat all axes as scalars. Do not cap dimensions.
 
 ## STORAGE
 
