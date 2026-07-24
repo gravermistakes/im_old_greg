@@ -18,6 +18,7 @@ executable greg-geom
                   , LinAlg
   build-depends:    base >= 4.14 && < 5
                   , bytestring
+                  , base64-bytestring >= 1.0
                   , containers
                   , cborg >= 0.2
                   , text

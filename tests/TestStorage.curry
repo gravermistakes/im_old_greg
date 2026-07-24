@@ -36,8 +36,8 @@ main = do
        Just (CFloat f, []) -> abs (f - 1.0) < 1.0e-12
        _                   -> False)
 
-  check "hex transport lossless"
-    (hexToBytes (bytesToHex [0, 15, 16, 200, 255])
+  check "b64 transport lossless"
+    (b64ToBytes (bytesToB64 [0, 15, 16, 200, 255])
        == [0, 15, 16, 200, 255])
 
   let f0 = emptyField

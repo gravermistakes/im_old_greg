@@ -15,7 +15,7 @@ module Storage
   , encodeField, decodeField
   , appendRecords, recordsOf, replay
   , compact, unframe, bodyBytes
-  , bytesToHex, hexToBytes
+  , bytesToB64, b64ToBytes
   ) where
 
 import Cbor
@@ -145,25 +145,47 @@ compact bs = case decodeField bs of
   Just f  -> Just (encodeField f)
   Nothing -> Nothing
 
--- hex transport ------------------------------------------------
+-- url-safe base64 transport (RFC 4648 §5) ----------------------
+-- alphabet A-Z a-z 0-9 - _ with = padding; safe in $() and URLs
 
-hexDigits :: String
-hexDigits = "0123456789abcdef"
+b64Alphabet :: String
+b64Alphabet =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
 
-bytesToHex :: [Int] -> String
-bytesToHex = concatMap byte
+bytesToB64 :: [Int] -> String
+bytesToB64 = encode
  where
-  byte b = [ hexDigits !! (b `div` 16), hexDigits !! (b `mod` 16) ]
+  alpha n = b64Alphabet !! n
+  encode []               = []
+  encode [a]              =
+    [alpha (a `div` 4), alpha ((a `mod` 4) * 16), '=', '=']
+  encode [a, b]           =
+    [alpha (a `div` 4),
+     alpha ((a `mod` 4) * 16 + b `div` 16),
+     alpha ((b `mod` 16) * 4),
+     '=']
+  encode (a : b : c : rest) =
+    alpha (a `div` 4) :
+    alpha ((a `mod` 4) * 16 + b `div` 16) :
+    alpha ((b `mod` 16) * 4 + c `div` 64) :
+    alpha (c `mod` 64) :
+    encode rest
 
-hexToBytes :: String -> [Int]
-hexToBytes s = case filter (`elem` hexDigits) (map toLower_ s) of
-  cs -> pairs cs
+b64ToBytes :: String -> [Int]
+b64ToBytes s = decode (filter (/= '=') s)
  where
-  toLower_ c = if c >= 'A' && c <= 'F'
-                 then chr (ord c + 32) else c
-  pairs (a : b : rest) = (val a * 16 + val b) : pairs rest
-  pairs [_]            = []
-  pairs []             = []
-  val c = case lookup c (zip hexDigits [0 ..]) of
+  val c = case lookup c (zip b64Alphabet [0 ..]) of
     Just v  -> v
     Nothing -> 0
+  decode []                     = []
+  decode [_]                    = []
+  decode [a, b]                 =
+    [val a * 4 + val b `div` 16]
+  decode [a, b, c]              =
+    [val a * 4 + val b `div` 16,
+     (val b `mod` 16) * 16 + val c `div` 4]
+  decode (a : b : c : d : rest) =
+    (val a * 4 + val b `div` 16) :
+    ((val b `mod` 16) * 16 + val c `div` 4) :
+    ((val c `mod` 4) * 64 + val d) :
+    decode rest
