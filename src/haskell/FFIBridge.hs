@@ -34,7 +34,7 @@ main = do
   mapM_ (`hSetBinaryMode` True) [stdin, stdout]
   args <- getArgs
   case args of
-    ["bin2b64"]  -> BS.getContents >>= BC.putStrLn . B64.encodeBase64'
+    ["bin2b64"]  -> BS.getContents >>= BC.putStrLn . B64.encode
     ["b64tobin"] -> BS.getContents >>= BS.putStr . B64.decodeLenient
     ["bin2hex"]  -> BS.getContents >>= BC.putStrLn . toHex
     ["hex2bin"]  -> BS.getContents >>= BS.putStr . fromHex
