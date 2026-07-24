@@ -31,20 +31,20 @@ mutates() {
   esac
 }
 
-field_hex() {
+field_b64() {
   if [ -f "$FIELD" ]; then
-    "$GEOM" bin2hex < "$FIELD"
+    "$GEOM" bin2b64 < "$FIELD"
   else
     printf ''
   fi
 }
 
 if mutates "$cmd"; then
-  out=$(field_hex | "$BIN" "$@")
+  out=$(field_b64 | "$BIN" "$@")
   tmp="$FIELD.tmp.$$"
-  printf '%s' "$out" | "$GEOM" hex2bin > "$tmp"
+  printf '%s' "$out" | "$GEOM" b64tobin > "$tmp"
   mv "$tmp" "$FIELD"
   echo "field written: $FIELD"
 else
-  field_hex | "$BIN" "$@"
+  field_b64 | "$BIN" "$@"
 fi

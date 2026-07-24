@@ -34,12 +34,12 @@ main = do
       run cmd rest (loadField hexIn)
 
 loadField :: String -> Field
-loadField hexIn = case decodeField (hexToBytes hexIn) of
+loadField b64In = case decodeField (b64ToBytes b64In) of
   Just f  -> f
   Nothing -> emptyField
 
 emitField :: Field -> IO ()
-emitField f = putStrLn (bytesToHex (encodeField f))
+emitField f = putStrLn (bytesToB64 (encodeField f))
 
 run :: String -> [String] -> Field -> IO ()
 run cmd args f = case (cmd, args) of

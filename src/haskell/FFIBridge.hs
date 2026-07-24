@@ -19,6 +19,7 @@ import qualified Data.ByteString.Char8 as BC
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Text as T
 import Data.Char ( digitToInt, isHexDigit, intToDigit )
+import qualified Data.ByteString.Base64.URL as B64
 import Data.Word ( Word8 )
 import System.Environment ( getArgs )
 import System.Exit ( exitFailure )
@@ -33,9 +34,11 @@ main = do
   mapM_ (`hSetBinaryMode` True) [stdin, stdout]
   args <- getArgs
   case args of
-    ["bin2hex"] -> BS.getContents >>= BC.putStrLn . toHex
-    ["hex2bin"] -> BS.getContents >>= BS.putStr . fromHex
-    ["kernel"]  -> BS.getContents >>= runKernel . fromHex
+    ["bin2b64"]  -> BS.getContents >>= BC.putStrLn . B64.encodeBase64'
+    ["b64tobin"] -> BS.getContents >>= BS.putStr . B64.decodeLenient
+    ["bin2hex"]  -> BS.getContents >>= BC.putStrLn . toHex
+    ["hex2bin"]  -> BS.getContents >>= BS.putStr . fromHex
+    ["kernel"]   -> BS.getContents >>= runKernel . fromHex
     ["validate"] -> BS.getContents >>= validate
     _ -> do
       hPutStrLn stderr usage
@@ -44,6 +47,8 @@ main = do
 usage :: String
 usage = unlines
   [ "greg-geom  (the machine half of im-old-greg)"
+  , "  bin2b64   stdin binary  -> stdout url-safe base64"
+  , "  b64tobin  stdin base64  -> stdout binary"
   , "  bin2hex   stdin binary  -> stdout lowercase hex"
   , "  hex2bin   stdin hex     -> stdout binary"
   , "  kernel    stdin hex CBOR request -> stdout hex CBOR reply"
