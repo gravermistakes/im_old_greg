@@ -234,7 +234,8 @@ im-old-greg/
 |   |   |-- Storage.curry     (.greg FCAF framing + transport)
 |   |   |-- Witness.curry     (witness mesh observations)
 |   |   |-- Chores.curry      (chore CRUD + suggestion engine)
-|   |   +-- AxisSeeds.curry   (starter axis atlas, 3 tiers)
+|   |   |-- AxisSeeds.curry   (starter axis atlas, 3 tiers)
+|   |   +-- WikiSeeds.curry   (seven random wikipedia articles as wojaks)
 |   +-- haskell/
 |       |-- greg-geom.cabal   (helper executable)
 |       |-- Geometry.hs       (curvature + chord measures)
@@ -256,7 +257,8 @@ im-old-greg/
 |   |-- TestAxes.curry
 |   |-- TestStorage.curry
 |   |-- TestAnalogy.curry
-|   +-- TestQuery.curry
+|   |-- TestQuery.curry
+|   +-- TestWikiSeeds.curry
 |-- reference/
 |   +-- metric_definitions.md
 +-- templates/

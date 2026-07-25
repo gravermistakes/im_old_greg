@@ -21,6 +21,7 @@ import Query
 import Analogy
 import Storage
 import Advisory
+import WikiSeeds
 
 main :: IO ()
 main = do
@@ -54,6 +55,9 @@ run cmd args f = case (cmd, args) of
 
   ("set-coord", (seed : ax : val : _)) ->
     emitField (setCoord (CText seed) ax (parseCoord val) f)
+
+  ("seed", ("wikipedia" : _)) ->
+    emitField (graftWikiSeeds f)
 
   ("list", _) -> putStr (listReport f)
 
@@ -202,6 +206,7 @@ usage = unlines
   , "  add SEED [ax=v ...]         grow a wojak (connects to isness)"
   , "  connect A B [relation]      lateral connection"
   , "  set-coord SEED AXIS VALUE   place a coordinate"
+  , "  seed wikipedia              graft the seven random articles"
   , "  list                        field summary"
   , "  query SEED [steps]          diffuse signal from a seed"
   , "  relate A B                  morphisms + relatedness"

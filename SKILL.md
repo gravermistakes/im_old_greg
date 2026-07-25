@@ -27,6 +27,10 @@ stop and report before doing anything else.
 
 Every wojak automatically connects to the axis of isness. Seeds are identity: reusing a seed accretes onto the same wojak, never replaces it.
 
+`seed wikipedia` grafts seven wojaks drawn at random from en.wikipedia into whatever field is on stdin. It is idempotent: re-running accretes nothing. Use it to get a field with real cross-domain spread before running shape queries against a cold store.
+
+When you place a wojak, give it only the axes its own content puts it on. Shared axes are found, not assigned; an axis every wojak happens to carry is a sign you handed axes out instead of letting them be taken.
+
 ## Asking questions
 
 The query language is Curry, not Bash. The harness translates CLI
