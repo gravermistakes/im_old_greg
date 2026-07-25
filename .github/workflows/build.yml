@@ -85,7 +85,8 @@ jobs:
         shell: bash
         run: |
           export HOME=/root
-          for t in TestMetrics TestAxes TestStorage TestQuery TestAnalogy; do
+          for t in TestMetrics TestAxes TestStorage TestQuery \
+                   TestAnalogy TestWikiSeeds; do
             echo "== $t"
             kics2 --nocypm :set path src/curry:tests \
                   :load "$t" :save :quit
