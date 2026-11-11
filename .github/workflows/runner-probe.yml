@@ -1,0 +1,16 @@
+name: runner-probe
+
+on:
+  push:
+    branches:
+      - improve/analogy-direction-and-axis-evidence
+
+jobs:
+  ubuntu-probe:
+    name: ubuntu-latest minimal job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm runner startup
+        run: |
+          printf '%s\n' "runner-started"
+          uname -s
