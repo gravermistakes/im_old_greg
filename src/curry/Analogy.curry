@@ -20,31 +20,44 @@ import Wojak
 import Metrics
 import Canonicalize
 
--- per-axis transformation evidence between two wojaks
-type Delta = [(String, [(Morphism, Verdict)], Float)]
+-- Per-axis evidence preserves structure, distance, and scalar
+-- orientation. A signed scalar delta is available only when both
+-- coordinates are scalar; nested types retain their native metric.
+type Delta = [(String, [(Morphism, Verdict)], Float, Maybe Float)]
 
 transformation :: Field -> Seed -> Seed -> Delta
 transformation f a b =
   case (wojakBySeed f a, wojakBySeed f b) of
     (Just wa, Just wb) ->
-      [ (ax, morphisms ca cb, coordDist ca cb)
+      [ (ax, morphisms ca cb, coordDist ca cb,
+         signedScalarDelta ca cb)
       | (ax, ca) <- wjCoords wa
       , Just cb <- [getCoord wb ax] ]
     _ -> []
 
--- distance between two transformations: do they confirm the
--- same morphisms and move by similar amounts, axis by axis?
+signedScalarDelta :: Coord -> Coord -> Maybe Float
+signedScalarDelta (Scalar x) (Scalar y) = Just (y - x)
+signedScalarDelta _ _ = Nothing
+
+-- Compare shared axes in the same direction, and count names
+-- absent from either side. Equal axis counts do not imply
+-- equal axis evidence.
 deltaDist :: Delta -> Delta -> Float
 deltaDist d1 d2 =
   fromInt missing + sum (map axisGap shared)
  where
-  shared  = [ (v1, g1, v2, g2)
-            | (ax1, v1, g1) <- d1
-            , (ax2, v2, g2) <- d2
-            , ax1 == ax2 ]
-  missing = abs (length d1 - length d2)
-  axisGap (v1, g1, v2, g2) =
-    fromInt (verdictGap v1 v2) + abs (g1 - g2)
+  shared = [ (v1, g1, s1, v2, g2, s2)
+           | (ax1, v1, g1, s1) <- d1
+           , (ax2, v2, g2, s2) <- d2
+           , ax1 == ax2 ]
+  missing =
+    length [ ax | (ax, _, _, _) <- d1, not (hasAxis ax d2) ]
+    + length [ ax | (ax, _, _, _) <- d2, not (hasAxis ax d1) ]
+  hasAxis ax ds = any (\(name, _, _, _) -> name == ax) ds
+  axisGap (v1, g1, s1, v2, g2, s2) =
+    fromInt (verdictGap v1 v2) + motionGap g1 s1 g2 s2
+  motionGap _ (Just x) _ (Just y) = abs (x - y)
+  motionGap g1 _ g2 _ = abs (g1 - g2)
   verdictGap v1 v2 =
     length [ m | (m, x) <- v1
                , lookup m v2 /= Nothing
