@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - improve/analogy-direction-and-axis-evidence
+  pull_request:
+    branches:
+      - main
 
 jobs:
   ubuntu-probe:
